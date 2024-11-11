@@ -1,0 +1,243 @@
+1..
+The Command Pattern is useful when you want to decouple the object that invokes the operation from the object that performs the operation. In this example, we will implement the undo functionality with a ceiling fan control system. The idea is to issue commands to turn the ceiling fan on or off, change its speed, and allow for undo functionality.
+
+Java Program: Undo Command to Test Ceiling Fan
+In this program, we will create the following components:
+
+Command Interface - for defining execute and undo methods.
+Concrete Command Classes - such as turning the fan on, turning it off, and setting its speed.
+Receiver Class - the actual CeilingFan that performs the actions.
+Invoker Class - the remote control to execute commands.
+Main Class - to test the functionality.
+1. Command Interface
+java
+Copy code
+// Command Interface
+public interface Command {
+    void execute();
+    void undo();
+}
+2. Concrete Command Classes
+java
+Copy code
+// Concrete Command: Turn On the Ceiling Fan
+class CeilingFanOnCommand implements Command {
+    private CeilingFan ceilingFan;
+
+    public CeilingFanOnCommand(CeilingFan ceilingFan) {
+        this.ceilingFan = ceilingFan;
+    }
+
+    @Override
+    public void execute() {
+        ceilingFan.turnOn();
+    }
+
+    @Override
+    public void undo() {
+        ceilingFan.turnOff();  // Undo the turn on by turning off
+    }
+}
+
+// Concrete Command: Turn Off the Ceiling Fan
+class CeilingFanOffCommand implements Command {
+    private CeilingFan ceilingFan;
+
+    public CeilingFanOffCommand(CeilingFan ceilingFan) {
+        this.ceilingFan = ceilingFan;
+    }
+
+    @Override
+    public void execute() {
+        ceilingFan.turnOff();
+    }
+
+    @Override
+    public void undo() {
+        ceilingFan.turnOn();  // Undo the turn off by turning on
+    }
+}
+
+// Concrete Command: Set the Ceiling Fan Speed to Medium
+class CeilingFanSpeedMediumCommand implements Command {
+    private CeilingFan ceilingFan;
+
+    public CeilingFanSpeedMediumCommand(CeilingFan ceilingFan) {
+        this.ceilingFan = ceilingFan;
+    }
+
+    @Override
+    public void execute() {
+        ceilingFan.setSpeedMedium();
+    }
+
+    @Override
+    public void undo() {
+        ceilingFan.setSpeedLow();  // Undo to low speed
+    }
+}
+
+// Concrete Command: Set the Ceiling Fan Speed to High
+class CeilingFanSpeedHighCommand implements Command {
+    private CeilingFan ceilingFan;
+
+    public CeilingFanSpeedHighCommand(CeilingFan ceilingFan) {
+        this.ceilingFan = ceilingFan;
+    }
+
+    @Override
+    public void execute() {
+        ceilingFan.setSpeedHigh();
+    }
+
+    @Override
+    public void undo() {
+        ceilingFan.setSpeedMedium();  // Undo to medium speed
+    }
+}
+3. Receiver Class (CeilingFan)
+java
+Copy code
+// Receiver Class: CeilingFan
+class CeilingFan {
+    private String speed = "Off";
+
+    public void turnOn() {
+        speed = "On";
+        System.out.println("Ceiling Fan is ON");
+    }
+
+    public void turnOff() {
+        speed = "Off";
+        System.out.println("Ceiling Fan is OFF");
+    }
+
+    public void setSpeedLow() {
+        speed = "Low Speed";
+        System.out.println("Ceiling Fan is on Low Speed");
+    }
+
+    public void setSpeedMedium() {
+        speed = "Medium Speed";
+        System.out.println("Ceiling Fan is on Medium Speed");
+    }
+
+    public void setSpeedHigh() {
+        speed = "High Speed";
+        System.out.println("Ceiling Fan is on High Speed");
+    }
+
+    public String getSpeed() {
+        return speed;
+    }
+}
+4. Invoker Class (RemoteControl)
+java
+Copy code
+// Invoker Class: RemoteControl
+class RemoteControl {
+    private Command command;
+
+    // Set a command for the remote control
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    // Press the button to execute the command
+    public void pressButton() {
+        command.execute();
+    }
+
+    // Press the undo button to undo the previous command
+    public void pressUndoButton() {
+        command.undo();
+    }
+}
+5. Main Class to Test the Ceiling Fan with Undo
+java
+Copy code
+public class CommandPatternTest {
+    public static void main(String[] args) {
+        // Create a CeilingFan (Receiver)
+        CeilingFan ceilingFan = new CeilingFan();
+
+        // Create commands for different actions
+        Command ceilingFanOn = new CeilingFanOnCommand(ceilingFan);
+        Command ceilingFanOff = new CeilingFanOffCommand(ceilingFan);
+        Command ceilingFanSpeedMedium = new CeilingFanSpeedMediumCommand(ceilingFan);
+        Command ceilingFanSpeedHigh = new CeilingFanSpeedHighCommand(ceilingFan);
+
+        // Create the remote control (Invoker)
+        RemoteControl remote = new RemoteControl();
+
+        // Test the Ceiling Fan controls
+        System.out.println("Testing Remote Control with Ceiling Fan:");
+
+        // Turn on the ceiling fan
+        remote.setCommand(ceilingFanOn);
+        remote.pressButton();  // Ceiling Fan ON
+
+        // Set fan speed to Medium
+        remote.setCommand(ceilingFanSpeedMedium);
+        remote.pressButton();  // Ceiling Fan on Medium Speed
+
+        // Set fan speed to High
+        remote.setCommand(ceilingFanSpeedHigh);
+        remote.pressButton();  // Ceiling Fan on High Speed
+
+        // Turn off the ceiling fan
+        remote.setCommand(ceilingFanOff);
+        remote.pressButton();  // Ceiling Fan OFF
+
+        // Test Undo functionality
+        System.out.println("\nUndoing the last command:");
+        remote.pressUndoButton();  // Undo: Turn Fan back ON
+
+        remote.pressUndoButton();  // Undo: Set fan speed to Medium
+    }
+}
+Explanation:
+Command Interface:
+
+The Command interface has two methods: execute() and undo(). All concrete commands implement these methods to execute and undo their actions.
+Concrete Command Classes:
+
+CeilingFanOnCommand: Turns the fan on.
+CeilingFanOffCommand: Turns the fan off.
+CeilingFanSpeedMediumCommand: Sets the fan speed to medium.
+CeilingFanSpeedHighCommand: Sets the fan speed to high.
+Each command has an undo() method to reverse the effect of the command.
+Receiver Class (CeilingFan):
+
+The CeilingFan class represents the actual fan, with methods to turn it on or off and set its speed to low, medium, or high.
+The getSpeed() method is used to return the current state of the fan (used for debugging or tracking the fan's status).
+Invoker Class (RemoteControl):
+
+The RemoteControl class allows commands to be assigned to it via setCommand(), and the pressButton() method executes the assigned command.
+The pressUndoButton() method invokes the undo() functionality of the command to revert the action.
+Main Class (CommandPatternTest):
+
+The CommandPatternTest class demonstrates how the remote control interacts with the ceiling fan.
+The program performs a sequence of actions: turning the fan on, changing its speed, turning it off, and then undoing the last actions.
+
+
+2.
+
+components
+ardiuno  A0- photo resi-terminal1 
+        5v- terminal 2
+photoresistor- resistor- gnd
+               
+led- resistor-gnd
+     D10
+2-resistor
+
+code
+var-ldr
+set ldr-read analog A0
+print to serial mon -ldr
+if else
+math block - ldr var  <500
+set pin 10 high
+else
+set pin 10 low

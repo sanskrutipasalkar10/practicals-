@@ -1,0 +1,366 @@
+1.
+
+Java Program: Implementing State Pattern for a Gumball Machine
+1. State Interface
+java
+Copy code
+// State Interface
+public interface State {
+    void insertQuarter();
+    void ejectQuarter();
+    void turnCrank();
+    void dispense();
+}
+2. Concrete State Classes
+java
+Copy code
+// Concrete State: No Quarter
+class NoQuarterState implements State {
+    private GumballMachine gumballMachine;
+
+    public NoQuarterState(GumballMachine gumballMachine) {
+        this.gumballMachine = gumballMachine;
+    }
+
+    @Override
+    public void insertQuarter() {
+        System.out.println("You inserted a quarter.");
+        gumballMachine.setState(gumballMachine.getHasQuarterState());
+    }
+
+    @Override
+    public void ejectQuarter() {
+        System.out.println("You haven't inserted a quarter.");
+    }
+
+    @Override
+    public void turnCrank() {
+        System.out.println("You need to insert a quarter first.");
+    }
+
+    @Override
+    public void dispense() {
+        System.out.println("You need to insert a quarter first.");
+    }
+}
+
+// Concrete State: Has Quarter
+class HasQuarterState implements State {
+    private GumballMachine gumballMachine;
+
+    public HasQuarterState(GumballMachine gumballMachine) {
+        this.gumballMachine = gumballMachine;
+    }
+
+    @Override
+    public void insertQuarter() {
+        System.out.println("You can't insert another quarter.");
+    }
+
+    @Override
+    public void ejectQuarter() {
+        System.out.println("Quarter returned.");
+        gumballMachine.setState(gumballMachine.getNoQuarterState());
+    }
+
+    @Override
+    public void turnCrank() {
+        System.out.println("You turned the crank...");
+        gumballMachine.setState(gumballMachine.getSoldState());
+    }
+
+    @Override
+    public void dispense() {
+        System.out.println("No gumball dispensed.");
+    }
+}
+
+// Concrete State: Sold
+class SoldState implements State {
+    private GumballMachine gumballMachine;
+
+    public SoldState(GumballMachine gumballMachine) {
+        this.gumballMachine = gumballMachine;
+    }
+
+    @Override
+    public void insertQuarter() {
+        System.out.println("Please wait, we're already giving you a gumball.");
+    }
+
+    @Override
+    public void ejectQuarter() {
+        System.out.println("Sorry, you already turned the crank.");
+    }
+
+    @Override
+    public void turnCrank() {
+        System.out.println("Turning the crank again won't give you another gumball.");
+    }
+
+    @Override
+    public void dispense() {
+        System.out.println("A gumball is dispensed.");
+        if (gumballMachine.getCount() > 0) {
+            gumballMachine.setState(gumballMachine.getNoQuarterState());
+        } else {
+            System.out.println("Out of gumballs!");
+            gumballMachine.setState(gumballMachine.getSoldOutState());
+        }
+    }
+}
+
+// Concrete State: Sold Out
+class SoldOutState implements State {
+    private GumballMachine gumballMachine;
+
+    public SoldOutState(GumballMachine gumballMachine) {
+        this.gumballMachine = gumballMachine;
+    }
+
+    @Override
+    public void insertQuarter() {
+        System.out.println("Sorry, we're sold out.");
+    }
+
+    @Override
+    public void ejectQuarter() {
+        System.out.println("You haven't inserted a quarter.");
+    }
+
+    @Override
+    public void turnCrank() {
+        System.out.println("You turned, but there are no gumballs.");
+    }
+
+    @Override
+    public void dispense() {
+        System.out.println("No gumball dispensed.");
+    }
+}
+3. Gumball Machine (Context Class)
+java
+Copy code
+// Context: GumballMachine
+public class GumballMachine {
+    private State noQuarterState;
+    private State hasQuarterState;
+    private State soldState;
+    private State soldOutState;
+    private State currentState;
+    private int count;
+
+    public GumballMachine(int numberGumballs) {
+        noQuarterState = new NoQuarterState(this);
+        hasQuarterState = new HasQuarterState(this);
+        soldState = new SoldState(this);
+        soldOutState = new SoldOutState(this);
+        this.count = numberGumballs;
+
+        if (numberGumballs > 0) {
+            currentState = noQuarterState;
+        } else {
+            currentState = soldOutState;
+        }
+    }
+
+    public void insertQuarter() {
+        currentState.insertQuarter();
+    }
+
+    public void ejectQuarter() {
+        currentState.ejectQuarter();
+    }
+
+    public void turnCrank() {
+        currentState.turnCrank();
+        currentState.dispense();
+    }
+
+    public void setState(State state) {
+        this.currentState = state;
+    }
+
+    public State getNoQuarterState() {
+        return noQuarterState;
+    }
+
+    public State getHasQuarterState() {
+        return hasQuarterState;
+    }
+
+    public State getSoldState() {
+        return soldState;
+    }
+
+    public State getSoldOutState() {
+        return soldOutState;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void releaseBall() {
+        System.out.println("A gumball comes rolling out the slot...");
+        if (count > 0) {
+            count--;
+        }
+    }
+}
+4. Main Class to Test the Gumball Machine
+java
+Copy code
+public class GumballMachineTest {
+    public static void main(String[] args) {
+        GumballMachine gumballMachine = new GumballMachine(2);
+
+        // Test with a few interactions
+        System.out.println("Test 1: Inserting a quarter, turning the crank, and getting a gumball");
+        gumballMachine.insertQuarter();
+        gumballMachine.turnCrank();
+
+        System.out.println("\nTest 2: Inserting a quarter again");
+        gumballMachine.insertQuarter();
+        gumballMachine.turnCrank();
+
+        System.out.println("\nTest 3: Trying to insert a quarter when the machine is sold out");
+        gumballMachine.insertQuarter();
+
+        System.out.println("\nTest 4: Trying to turn the crank when the machine is sold out");
+        gumballMachine.turnCrank();
+    }
+}
+Explanation of the Code:
+State Interface:
+
+The State interface defines the methods insertQuarter(), ejectQuarter(), turnCrank(), and dispense(), which each concrete state class implements to define behavior based on the current state.
+Concrete State Classes:
+
+Each concrete state (NoQuarterState, HasQuarterState, SoldState, SoldOutState) implements the behaviors and actions that correspond to the different states of the Gumball Machine.
+Gumball Machine:
+
+The GumballMachine class is the context class that holds a reference to the current state. It manages the state transitions (e.g., from NoQuarterState to HasQuarterState) and delegates actions to the current state.
+It also handles the logic of dispensing a gumball, checking the count, and transitioning to the SoldOutState when out of gumballs.
+Main Class:
+
+The GumballMachineTest class tests the Gumball Machine. It inserts a quarter, turns the crank, and performs various actions based on the machine's current state, demonstrating the State Pattern.
+
+
+
+2.
+
+To start with Raspberry Pi and execute various Linux commands, you need to follow these general steps:
+
+Boot your Raspberry Pi:
+
+Connect your Raspberry Pi to a monitor, keyboard, and power source.
+Wait for the Raspberry Pi to boot up and load the operating system (e.g., Raspberry Pi OS).
+Open the Terminal Window:
+
+On the Raspberry Pi desktop, open the terminal by clicking the terminal icon or using Ctrl + Alt + T.
+Execute Linux Commands:
+
+You can run a variety of commands in the terminal to perform different operations. Below is a brief description of each command you mentioned:
+Basic Linux Commands
+ls: Lists files and directories in the current directory.
+
+bash
+Copy code
+ls
+ls -l   # Detailed listing with permissions, owner, and timestamps
+cd: Changes the current directory.
+
+bash
+Copy code
+cd /path/to/directory  # Navigate to a specific directory
+cd ..                  # Go up one level in the directory structure
+touch: Creates an empty file.
+
+bash
+Copy code
+touch newfile.txt
+mv: Moves or renames files and directories.
+
+bash
+Copy code
+mv file.txt /path/to/new/location/
+mv oldname.txt newname.txt
+rm: Removes files or directories.
+
+bash
+Copy code
+rm file.txt                # Remove a file
+rm -r directoryname        # Remove a directory and its contents
+man: Displays the manual for a command.
+
+bash
+Copy code
+man ls   # Shows the manual for the 'ls' command
+mkdir: Creates a new directory.
+
+bash
+Copy code
+mkdir new_directory
+rmdir: Removes an empty directory.
+
+bash
+Copy code
+rmdir empty_directory
+tar: Archives multiple files into one file (often used with compression).
+
+bash
+Copy code
+tar -cvf archive.tar /path/to/files  # Create an archive
+tar -xvf archive.tar                 # Extract an archive
+gzip: Compresses files.
+
+bash
+Copy code
+gzip file.txt        # Compress a file
+gunzip file.txt.gz   # Decompress a file
+cat: Displays the contents of a file.
+
+bash
+Copy code
+cat filename.txt
+more and less: View the contents of a file one screen at a time.
+
+bash
+Copy code
+more filename.txt
+less filename.txt
+ps: Displays information about currently running processes.
+
+bash
+Copy code
+ps
+ps aux               # Detailed view of all running processes
+sudo: Runs a command as the superuser or another user.
+
+bash
+Copy code
+sudo apt update      # Run the 'apt update' command as a superuser
+cron: A daemon to run scheduled tasks (cron jobs).
+
+bash
+Copy code
+crontab -e           # Edit the current user's crontab
+chown: Changes the ownership of a file or directory.
+
+bash
+Copy code
+sudo chown user:group filename.txt
+chgrp: Changes the group ownership of a file or directory.
+
+bash
+Copy code
+sudo chgrp groupname filename.txt
+ping: Checks network connectivity to another host.
+
+bash
+Copy code
+ping example.com
+These commands can help you navigate and manage your Raspberry Pi environment efficiently.
+
+

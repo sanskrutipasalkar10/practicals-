@@ -1,0 +1,115 @@
+1.
+import java.util.Observable;
+import java.util.Observer;
+
+// WeatherData class that extends Observable
+class WeatherData extends Observable {
+    private float temperature;
+    private float humidity;
+    private float pressure;
+
+    // Method to set new measurements
+    public void setMeasurements(float temperature, float humidity, float pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        measurementsChanged();
+    }
+
+    // Method to notify observers when measurements change
+    private void measurementsChanged() {
+        setChanged();  // Marks the observable as having changed
+        notifyObservers();  // Notifies all registered observers
+    }
+
+    // Getter methods for the weather data
+    public float getTemperature() {
+        return temperature;
+    }
+
+    public float getHumidity() {
+        return humidity;
+    }
+
+    public float getPressure() {
+        return pressure;
+    }
+}
+
+// Display class that implements Observer
+class CurrentConditionsDisplay implements Observer {
+    private float temperature;
+    private float humidity;
+    private float pressure;
+    private Observable weatherData;
+
+    public CurrentConditionsDisplay(Observable weatherData) {
+        this.weatherData = weatherData;
+        weatherData.addObserver(this);  // Register this display as an observer
+    }
+
+    // This method will be called when the weather data changes
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof WeatherData) {
+            WeatherData weatherData = (WeatherData) o;
+            this.temperature = weatherData.getTemperature();
+            this.humidity = weatherData.getHumidity();
+            this.pressure = weatherData.getPressure();
+            display();
+        }
+    }
+
+    // Display the current weather conditions
+    public void display() {
+        System.out.println("Current conditions: ");
+        System.out.println("Temperature: " + temperature + "°C");
+        System.out.println("Humidity: " + humidity + "%");
+        System.out.println("Pressure: " + pressure + " hPa");
+    }
+}
+
+// Main class to test the Weather Station
+public class WeatherStation {
+    public static void main(String[] args) {
+        // Create the weather data object
+        WeatherData weatherData = new WeatherData();
+        
+        // Create a display that observes the weather data
+        CurrentConditionsDisplay currentDisplay = new CurrentConditionsDisplay(weatherData);
+        
+        // Simulate changing weather conditions
+        System.out.println("Weather station is updating measurements...");
+        weatherData.setMeasurements(25.0f, 65.0f, 1013.0f);  // Temperature, Humidity, Pressure
+        weatherData.setMeasurements(22.0f, 70.0f, 1012.5f);
+        weatherData.setMeasurements(30.0f, 60.0f, 1010.0f);
+    }
+}
+
+
+2.
+components:
+arudino
+breadboard mini -2
+npn transistor
+2 led 3-resistors 
+vibration motor
+
+connection:
+npn transistor -bb1- collector= vibration motor- -ve  +ve- 5v ard
+                      base = resistor- D11
+                       emmiter=ard-gnd
+bb2- led resistor -gnd
+         d6,d7
+
+
+set pin H L
+set pin H L         
+set pin H L
+wait
+set pin H L
+set pin H L         
+set pin H L
+wait
+
+

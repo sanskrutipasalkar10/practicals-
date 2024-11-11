@@ -1,0 +1,212 @@
+The Factory Method design pattern allows you to define an interface for creating an object, but lets subclasses alter the type of objects that will be created. In the case of a pizza store, the factory method can be used to create different types of pizzas like NYStyleCheesePizza, ChicagoStyleCheesePizza, etc., based on the customer's choice.
+
+Java Program: Pizza Store with Factory Method
+java
+Copy code
+// Abstract Pizza class
+abstract class Pizza {
+    String name;
+    String dough;
+    String sauce;
+    String cheese;
+
+    // Prepare method that can be overridden by different pizza types
+    public void prepare() {
+        System.out.println("Preparing " + name);
+        System.out.println("Tossing dough: " + dough);
+        System.out.println("Adding sauce: " + sauce);
+        System.out.println("Adding cheese: " + cheese);
+    }
+
+    public void bake() {
+        System.out.println("Baking " + name + " at 350 degrees for 25 minutes");
+    }
+
+    public void cut() {
+        System.out.println("Cutting " + name + " into slices");
+    }
+
+    public void box() {
+        System.out.println("Boxing the " + name);
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+// Concrete Pizza classes
+
+class NYStyleCheesePizza extends Pizza {
+    public NYStyleCheesePizza() {
+        name = "NY Style Cheese Pizza";
+        dough = "Thin Crust Dough";
+        sauce = "Marinara Sauce";
+        cheese = "Reggiano Cheese";
+    }
+}
+
+class ChicagoStyleCheesePizza extends Pizza {
+    public ChicagoStyleCheesePizza() {
+        name = "Chicago Style Cheese Pizza";
+        dough = "Extra Thick Crust Dough";
+        sauce = "Plum Tomato Sauce";
+        cheese = "Mozzarella Cheese";
+    }
+
+    // Chicago style pizza is different in cutting method
+    @Override
+    public void cut() {
+        System.out.println("Cutting the pizza into square slices");
+    }
+}
+
+class NYStyleVeggiePizza extends Pizza {
+    public NYStyleVeggiePizza() {
+        name = "NY Style Veggie Pizza";
+        dough = "Thin Crust Dough";
+        sauce = "Tomato Sauce";
+        cheese = "Mozzarella Cheese";
+    }
+}
+
+class ChicagoStyleVeggiePizza extends Pizza {
+    public ChicagoStyleVeggiePizza() {
+        name = "Chicago Style Veggie Pizza";
+        dough = "Thick Crust Dough";
+        sauce = "Tomato Sauce";
+        cheese = "Mozzarella Cheese";
+    }
+
+    // Chicago style pizza has a different cutting method
+    @Override
+    public void cut() {
+        System.out.println("Cutting the veggie pizza into square slices");
+    }
+}
+
+// PizzaStore class with factory method
+abstract class PizzaStore {
+
+    // Factory method for creating pizzas
+    public Pizza orderPizza(String type) {
+        Pizza pizza;
+
+        pizza = createPizza(type);  // Factory method is called here
+        
+        pizza.prepare();
+        pizza.bake();
+        pizza.cut();
+        pizza.box();
+        
+        return pizza;
+    }
+
+    // Abstract method that subclasses must implement to create specific types of pizza
+    protected abstract Pizza createPizza(String type);
+}
+
+// Concrete PizzaStore class for New York Style Pizza Store
+class NYPizzaStore extends PizzaStore {
+
+    @Override
+    protected Pizza createPizza(String type) {
+        if (type.equals("cheese")) {
+            return new NYStyleCheesePizza();
+        } else if (type.equals("veggie")) {
+            return new NYStyleVeggiePizza();
+        } else {
+            return null;  // Handle other types if needed
+        }
+    }
+}
+
+// Concrete PizzaStore class for Chicago Style Pizza Store
+class ChicagoPizzaStore extends PizzaStore {
+
+    @Override
+    protected Pizza createPizza(String type) {
+        if (type.equals("cheese")) {
+            return new ChicagoStyleCheesePizza();
+        } else if (type.equals("veggie")) {
+            return new ChicagoStyleVeggiePizza();
+        } else {
+            return null;  // Handle other types if needed
+        }
+    }
+}
+
+// Main class to test the Factory Method pattern
+public class PizzaStoreTest {
+    public static void main(String[] args) {
+        
+        PizzaStore nyStore = new NYPizzaStore();
+        PizzaStore chicagoStore = new ChicagoPizzaStore();
+        
+        // Ordering pizzas from the New York store
+        System.out.println("Ordering NY Style Cheese Pizza:\n");
+        Pizza pizza1 = nyStore.orderPizza("cheese");
+        System.out.println("Ordered: " + pizza1.getName() + "\n");
+        
+        // Ordering pizzas from the Chicago store
+        System.out.println("Ordering Chicago Style Cheese Pizza:\n");
+        Pizza pizza2 = chicagoStore.orderPizza("cheese");
+        System.out.println("Ordered: " + pizza2.getName() + "\n");
+        
+        // Ordering a Veggie Pizza from the NY store
+        System.out.println("Ordering NY Style Veggie Pizza:\n");
+        Pizza pizza3 = nyStore.orderPizza("veggie");
+        System.out.println("Ordered: " + pizza3.getName() + "\n");
+        
+        // Ordering a Veggie Pizza from the Chicago store
+        System.out.println("Ordering Chicago Style Veggie Pizza:\n");
+        Pizza pizza4 = chicagoStore.orderPizza("veggie");
+        System.out.println("Ordered: " + pizza4.getName() + "\n");
+    }
+}
+Explanation:
+Pizza (Abstract Class):
+
+This is the base class for all pizza types. It has attributes for name, dough, sauce, and cheese, which are common to all pizzas.
+It provides default implementations for the methods prepare(), bake(), cut(), and box(). These can be overridden in concrete pizza classes if necessary.
+Concrete Pizza Classes (e.g., NYStyleCheesePizza, ChicagoStyleCheesePizza):
+
+These classes extend Pizza and set specific values for name, dough, sauce, and cheese.
+Some pizza types override the cut() method (e.g., Chicago style pizza is cut into square slices).
+PizzaStore (Abstract Class):
+
+The PizzaStore class defines a orderPizza() method, which calls the factory method createPizza().
+The createPizza() method is abstract and is implemented by subclasses to create specific types of pizza.
+Concrete PizzaStore Classes (NYPizzaStore, ChicagoPizzaStore):
+
+These concrete classes implement the createPizza() method to create specific types of pizzas based on the type string (e.g., "cheese", "veggie").
+Main Class (PizzaStoreTest):
+
+This is the test class that demonstrates how the PizzaStore class works. It orders different types of pizzas from New York and Chicago pizza stores and prints the results.
+
+
+
+2.
+components
+piezo buzzer
+2- led 2- resistor
+bb mini
+ardino
+pir sensor
+
+connection
+bb - led - resistor- gnd
+          -D6, D7
+buzzer- +ve- D10
+        -ve- GND
+pir - GND-GND
+      Power- 5v
+      Signal- A0
+
+
+pir read- Analong pin
+print serial motor
+if else
+set pin -3 7,6,10 lhh
+else
+set pin -3 7,6,10 hll

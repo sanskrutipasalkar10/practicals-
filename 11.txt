@@ -1,0 +1,301 @@
+1.
+
+Java Code Implementation
+1. Create the HeartModel Class
+The HeartModel will have a method beat() that we will adapt to the startBeating() method.
+
+java
+Copy code
+// HeartModel.java
+public class HeartModel {
+    public void beat() {
+        System.out.println("Heart is beating...");
+    }
+}
+2. Create the BeatModel Interface
+The BeatModel interface will define the startBeating() method, which our adapter will implement.
+
+java
+Copy code
+// BeatModel.java
+public interface BeatModel {
+    void startBeating();
+}
+3. Create the HeartAdapter Class
+The HeartAdapter will implement the BeatModel interface and adapt the beat() method of the HeartModel to the startBeating() method.
+
+java
+Copy code
+// HeartAdapter.java
+public class HeartAdapter implements BeatModel {
+    private HeartModel heartModel;
+
+    public HeartAdapter(HeartModel heartModel) {
+        this.heartModel = heartModel;
+    }
+
+    @Override
+    public void startBeating() {
+        heartModel.beat(); // Delegate the call to the HeartModel's beat() method
+    }
+}
+4. Create a Test Class to Demonstrate the Adapter
+In the test class, we will create a HeartModel, then use the HeartAdapter to make it work with the BeatModel interface.
+
+java
+Copy code
+// AdapterPatternTest.java
+public class AdapterPatternTest {
+    public static void main(String[] args) {
+        // Create a HeartModel instance
+        HeartModel heartModel = new HeartModel();
+
+        // Create an adapter that adapts the HeartModel to the BeatModel interface
+        BeatModel beatModel = new HeartAdapter(heartModel);
+
+        // Now use the adapter to start beating (i.e., invoke the startBeating() method)
+        beatModel.startBeating(); // Should call heartModel.beat() via the adapter
+    }
+}
+Explanation of the Code:
+HeartModel: This is the original class that has the beat() method simulating the heart beating.
+BeatModel: This interface defines a method startBeating() that we want to use in our client code (represented by the adapter pattern).
+HeartAdapter: This adapter class implements the BeatModel interface and delegates the startBeating() call to the beat() method of the HeartModel class.
+AdapterPatternTest: This is the client code where we use the HeartAdapter to adapt the HeartModel to the BeatModel interface.
+Output:
+csharp
+Copy code
+Heart is beating...
+Why This is Adapter Pattern:
+In this implementation:
+
+The HeartModel has a method beat(), but the system expects a method startBeating() (represented by BeatModel interface).
+The HeartAdapter adapts the HeartModel's beat() method to the startBeating() method, allowing the system to interact with the HeartModel as if it implements the BeatModel interface.
+This is a typical Adapter Pattern use case where we bridge the gap between two incompatible interfaces.
+
+
+
+2.
+
+Here are the Python programs you can run on your Raspberry Pi:
+
+a) Reading Name and Printing Hello Message
+
+Python
+name = input("Enter your name: ")
+print("Hello,", name + "!")
+Use code with caution.
+
+b) Reading Two Numbers and Performing Arithmetic Operations
+
+Python
+num1 = float(input("Enter the first number: "))
+num2 = float(input("Enter the second number: "))
+
+sum = num1 + num2
+difference = num1 - num2
+product = num1 * num2
+division = num1 / num2   
+
+
+print("Sum:", sum)
+print("Difference:", difference)
+print("Product:", product)
+print("Division:", division)
+Use code with caution.
+
+c) Word and Character Count of a String
+
+Python
+text = input("Enter a string: ")
+
+words = text.split()
+word_count = len(words)
+character_count = len(text)
+
+print("Word count:", word_count)
+print("Character count:", character_count)
+Use code with caution.
+
+d) Calculating Area of Different Shapes
+
+Python
+shape = input("Enter the shape (rectangle, triangle, circle): ")
+
+if shape == "rectangle":
+    length = float(input("Enter the length: "))
+    width = float(input("Enter the width: "))
+    area = length * width
+    print("Area of rectangle:", area)
+
+elif shape == "triangle":
+    base = float(input("Enter the base: "))
+    height = float(input("Enter the height: "))
+    area = 0.5 * base * height
+    print("Area of triangle:", area)
+
+elif shape == "circle":
+    radius = float(input("Enter the radius: "))
+    area = 3.14159 * radius * radius
+    print("Area of circle:", area)
+
+else:
+    print("Invalid shape")
+Use code with caution.
+
+To run these Python scripts on your Raspberry Pi:
+
+Open a Terminal: Connect to your Raspberry Pi via SSH or use a physical keyboard and monitor.
+Open a Text Editor: Use a text editor like nano or vim to create a new Python file.
+Write the Code: Paste the desired code into the file.
+Save the File: Save the file with a .py extension (e.g., hello.py).
+Run the Script: Use the python command to execute the script:
+Bash
+python hello.py
+Use code with caution.
+
+Additional Tips:
+
+Install Required Packages: Ensure you have the necessary packages installed. For example, you might need to install the math module for more complex calculations.
+Error Handling: Consider using try-except blocks to handle potential errors, such as invalid input or division by zero.
+Input Validation: You can add input validation to check if the user has entered valid data.
+User-Friendly Interface: You can create a more user-friendly interface using modules like tkinter for graphical user interfaces or cmd for command-line interfaces.
+By following these steps and incorporating additional features, you can create more sophisticated Python programs on your Raspberry Pi.
+
+
+Sources and related content
+
+
+2.
+
+a) Light an LED through Python program
+
+Hardware Setup:
+
+Raspberry Pi
+LED
+220 Ohm Resistor
+Jumper Wires
+Wiring:
+
+Connect one leg of the LED to GPIO pin 17.
+Connect the other leg of the LED to a 220 Ohm resistor.
+Connect the other end of the resistor to ground.
+Python Code:
+
+Python
+import RPi.GPIO as GPIO
+import time
+
+# Set the GPIO pin mode to output
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
+
+# Turn on the LED
+GPIO.output(17, GPIO.HIGH)
+
+# Keep the LED on for 5 seconds
+time.sleep(5)
+
+# Turn off the LED
+GPIO.output(17, GPIO.LOW)
+
+# Clean up GPIO pins
+GPIO.cleanup()
+Use code with caution.
+
+b) Get input from two switches and switch on corresponding LEDs
+
+Hardware Setup:
+
+Raspberry Pi
+2 LEDs
+2 220 Ohm Resistors
+2 Buttons
+Jumper Wires
+Wiring:
+
+Connect one leg of each LED to GPIO pins 17 and 27, respectively.
+Connect the other leg of each LED to a 220 Ohm resistor.
+Connect the other end of each resistor to ground.
+Connect one leg of each button to GPIO pins 22 and 23, respectively.
+Connect the other leg of each button to a 10k Ohm pull-up resistor.
+Connect the other end of each pull-up resistor to 3.3V.
+Python Code:
+
+Python
+import RPi.GPIO as GPIO
+import time
+
+# Set the GPIO pin mode to input and output
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
+GPIO.setup(27, GPIO.OUT)
+GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+while True:
+    if GPIO.input(22) == 0:
+        GPIO.output(17, GPIO.HIGH)
+    else:
+        GPIO.output(17, GPIO.LOW)
+
+    if GPIO.input(23) == 0:
+        GPIO.output(27, GPIO.HIGH)
+    else:
+        GPIO.output(27, GPIO.LOW)
+
+    time.sleep(0.1)
+
+GPIO.cleanup()
+Use code with caution.
+
+c) Flash an LED at a given on time and off time cycle
+
+Hardware Setup:
+
+Raspberry Pi
+LED
+220 Ohm Resistor
+Jumper Wires
+Wiring:
+
+Connect one leg of the LED to GPIO pin 17.
+Connect the other leg of the LED to a 220 Ohm resistor.
+Connect the other end of the resistor to ground.
+Python Code:
+
+Python
+import RPi.GPIO as GPIO
+import time
+
+# Set the GPIO pin mode to output
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
+
+# Read on and off times from a file
+with open("flash_times.txt", "r") as f:
+    on_time, off_time = map(float, f.readline().split())
+
+while True:
+    GPIO.output(17, GPIO.HIGH)
+    time.sleep(on_time)
+    GPIO.output(17, GPIO.LOW)
+    time.sleep(off_time)
+
+GPIO.cleanup()
+Use code with caution.
+
+Note:
+
+Ensure you have the RPi.GPIO library installed on your Raspberry Pi. You can install it using pip install RPi.GPIO.
+Adjust the GPIO pins and resistor values as needed for your specific hardware setup.
+For more complex projects, consider using libraries like GPIOZero which simplifies GPIO control.
+Always remember to clean up the GPIO pins after use to avoid unexpected behavior.
+
+
+
+
+
+
+

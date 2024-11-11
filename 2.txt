@@ -1,0 +1,99 @@
+1
+
+// Singleton class with thread safety
+public class Singleton {
+    
+    // Step 1: Create a private static instance of the class (volatile to ensure visibility in multi-threaded environments)
+    private static volatile Singleton instance;
+    
+    // Step 2: Private constructor to prevent instantiation from other classes
+    private Singleton() {
+        // Simulate some work done during object creation
+        System.out.println("Singleton Instance Created");
+    }
+
+    // Step 3: Provide a public method to access the instance, implementing lazy initialization
+    public static Singleton getInstance() {
+        if (instance == null) {
+            // Double-checked locking for thread safety
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+
+    // A method to simulate some action of the Singleton object
+    public void showMessage() {
+        System.out.println("Hello, Singleton Pattern in Multithreading!");
+    }
+
+    // Main method to test Singleton in multithreaded environment
+    public static void main(String[] args) {
+        
+        // Creating multiple threads to simulate concurrent access
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Singleton singleton1 = Singleton.getInstance();
+                singleton1.showMessage();
+            }
+        });
+
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Singleton singleton2 = Singleton.getInstance();
+                singleton2.showMessage();
+            }
+        });
+
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Singleton singleton3 = Singleton.getInstance();
+                singleton3.showMessage();
+            }
+        });
+
+        // Starting threads
+        t1.start();
+        t2.start();
+        t3.start();
+
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+
+
+2.
+components -  arudiono
+ultrasonic distance sensor 4 pin
+breadboard mini 
+resistor 
+led
+
+connections- gnd-gnd
+vcc-5v
+echo- digital 5
+trigger- digital 6
+led- cath-resistor-gnd
+anode-digital 7
+
+set var- read ultrasonic
+print serial motor
+ set pin 
+if else
+set pin-2

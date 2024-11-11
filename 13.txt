@@ -1,0 +1,119 @@
+1..
+
+Java Code Implementation
+1. Create the Volt Class
+The Volt class represents a voltage and provides a method to retrieve the voltage.
+
+java
+Copy code
+// Volt.java
+public class Volt {
+    private int volts;
+
+    public Volt(int volts) {
+        this.volts = volts;
+    }
+
+    public int getVolts() {
+        return volts;
+    }
+}
+2. Create the Socket Class
+The Socket class represents a power socket that provides a constant voltage of 120 volts.
+
+java
+Copy code
+// Socket.java
+public class Socket {
+    public Volt getVolt() {
+        return new Volt(120);
+    }
+}
+3. Create the Adapter Class
+The Adapter Class will extend the Socket class and convert the 120V into other voltages (3V, 12V, or 120V).
+
+java
+Copy code
+// SocketAdapter.java
+public class SocketAdapter extends Socket {
+
+    // Convert 120V to 3V
+    public Volt get3Volt() {
+        return convertVolt(getVolt(), 40);
+    }
+
+    // Convert 120V to 12V
+    public Volt get12Volt() {
+        return convertVolt(getVolt(), 10);
+    }
+
+    // Convert 120V to the desired voltage
+    public Volt get120Volt() {
+        return getVolt();
+    }
+
+    // Method to convert voltage
+    private Volt convertVolt(Volt volt, int divisor) {
+        return new Volt(volt.getVolts() / divisor);
+    }
+}
+4. Create the Client Code
+The Client Code demonstrates how the adapter works by calling the adapter methods to get 3V, 12V, or 120V.
+
+java
+Copy code
+// AdapterPatternTest.java
+public class AdapterPatternTest {
+
+    public static void main(String[] args) {
+        // Create a SocketAdapter instance
+        SocketAdapter socketAdapter = new SocketAdapter();
+
+        // Get 120V using the adapter (same as original socket)
+        System.out.println("120V using Adapter: " + socketAdapter.get120Volt().getVolts() + "V");
+
+        // Get 12V using the adapter
+        System.out.println("12V using Adapter: " + socketAdapter.get12Volt().getVolts() + "V");
+
+        // Get 3V using the adapter
+        System.out.println("3V using Adapter: " + socketAdapter.get3Volt().getVolts() + "V");
+    }
+}
+Output:
+arduino
+Copy code
+120V using Adapter: 120V
+12V using Adapter: 12V
+3V using Adapter: 3V
+Explanation of the Code:
+Volt Class: Represents a voltage object with an attribute volts. It has a method getVolts() to return the current voltage.
+Socket Class: This class simulates a socket that provides a constant voltage of 120V. The method getVolt() returns a Volt object with 120V.
+SocketAdapter Class: The adapter extends the Socket class and provides methods to get 3V, 12V, or 120V. The method convertVolt() divides the original 120V by a factor to convert it to the desired voltage. The get3Volt() method returns 3V, get12Volt() returns 12V, and get120Volt() returns the original 120V.
+AdapterPatternTest: This is the client code that demonstrates how the adapter can convert the socket's 120V to other voltages as needed.
+Why This is an Adapter Pattern:
+The Socket class provides a fixed voltage (120V), but the client needs voltages of 3V, 12V, and 120V.
+The Adapter Pattern allows us to adapt the Socket's output to the required voltages using the SocketAdapter class.
+The Class Adapter pattern is used here, where the Adapter extends the Socket class and provides the conversion logic inside the adapter itself. This approach allows the adapter to change the output voltage without modifying the original Socket class.
+This solution follows the Adapter Pattern and demonstrates how you can use it to make an interface compatible with client expectations by adapting it dynamically.
+
+2.
+
+
+components -  arudiono
+ultrasonic distance sensor 4 pin
+breadboard mini 
+resistor 
+led
+
+connections- gnd-gnd
+vcc-5v
+echo- digital 5
+trigger- digital 6
+led- cath-resistor-gnd
+anode-digital 7
+
+set var- read ultrasonic
+print serial motor
+ set pin 
+if else
+set pin-2

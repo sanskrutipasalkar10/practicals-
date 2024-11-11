@@ -1,0 +1,181 @@
+1.
+
+Java Program: Command Pattern for Remote Control
+1. Command Interface
+java
+Copy code
+// Command Interface
+public interface Command {
+    void execute();
+    void undo();
+}
+2. Concrete Command Classes
+java
+Copy code
+// Command to turn on the TV
+class TVOnCommand implements Command {
+    private TV tv;
+
+    public TVOnCommand(TV tv) {
+        this.tv = tv;
+    }
+
+    @Override
+    public void execute() {
+        tv.turnOn();
+    }
+
+    @Override
+    public void undo() {
+        tv.turnOff();
+    }
+}
+
+// Command to turn off the TV
+class TVOffCommand implements Command {
+    private TV tv;
+
+    public TVOffCommand(TV tv) {
+        this.tv = tv;
+    }
+
+    @Override
+    public void execute() {
+        tv.turnOff();
+    }
+
+    @Override
+    public void undo() {
+        tv.turnOn();
+    }
+}
+
+// Command to change the channel of the TV
+class ChangeChannelCommand implements Command {
+    private TV tv;
+    private int channel;
+
+    public ChangeChannelCommand(TV tv, int channel) {
+        this.tv = tv;
+        this.channel = channel;
+    }
+
+    @Override
+    public void execute() {
+        tv.changeChannel(channel);
+    }
+
+    @Override
+    public void undo() {
+        tv.changeChannel(1);  // Go back to default channel 1 (example)
+    }
+}
+3. Receiver Class (TV)
+java
+Copy code
+// Receiver class: TV
+class TV {
+    public void turnOn() {
+        System.out.println("TV is now ON.");
+    }
+
+    public void turnOff() {
+        System.out.println("TV is now OFF.");
+    }
+
+    public void changeChannel(int channel) {
+        System.out.println("Changing TV to channel " + channel);
+    }
+}
+4. Invoker Class (RemoteControl)
+java
+Copy code
+// Invoker class: RemoteControl
+class RemoteControl {
+    private Command slot;
+
+    public void setCommand(Command command) {
+        this.slot = command;
+    }
+
+    public void pressButton() {
+        slot.execute();
+    }
+
+    public void pressUndoButton() {
+        slot.undo();
+    }
+}
+5. Main Class to Test the Remote Control
+java
+Copy code
+public class CommandPatternTest {
+    public static void main(String[] args) {
+        // Create the receiver (TV)
+        TV myTV = new TV();
+
+        // Create the concrete commands
+        Command tvOn = new TVOnCommand(myTV);
+        Command tvOff = new TVOffCommand(myTV);
+        Command changeChannel = new ChangeChannelCommand(myTV, 5);
+
+        // Create the invoker (RemoteControl)
+        RemoteControl remote = new RemoteControl();
+
+        // Test remote control functionality
+        System.out.println("Testing Remote Control:");
+        remote.setCommand(tvOn);
+        remote.pressButton();  // Turn the TV ON
+        
+        remote.setCommand(changeChannel);
+        remote.pressButton();  // Change the TV channel to 5
+
+        remote.setCommand(tvOff);
+        remote.pressButton();  // Turn the TV OFF
+
+        // Test undo functionality
+        System.out.println("\nUndoing the last command:");
+        remote.pressUndoButton();  // Undo: Turn TV back ON
+    }
+}
+Explanation:
+Command Interface:
+
+The Command interface declares two methods: execute() to execute the command and undo() to undo the command (if needed).
+Concrete Command Classes:
+
+TVOnCommand: Turns the TV on.
+TVOffCommand: Turns the TV off.
+ChangeChannelCommand: Changes the channel to a specific value.
+Receiver (TV):
+
+The TV class has methods to turnOn(), turnOff(), and changeChannel(int channel) to simulate the behavior of a TV.
+Invoker (RemoteControl):
+
+The RemoteControl class holds a Command object and has two main actions:
+setCommand(Command command): Sets the current command for the remote control.
+pressButton(): Executes the command.
+pressUndoButton(): Undoes the last command (if the command supports undo).
+Main Class (CommandPatternTest):
+
+The CommandPatternTest class demonstrates how the remote control works by creating instances of the commands (TVOnCommand, TVOffCommand, ChangeChannelCommand), setting them on the remote, and invoking them.
+The program also demonstrates the undo functionality, where the pressUndoButton() method reverts the last executed command.
+
+
+2.
+components-
+lcd- sda scl-A4,A5
+arduino
+temp sensor- power -5v
+             vout-A0
+             gnd- gnd
+
+set temp- map(read analog pin AO(-20)(*3.04)to Range -20 120
+print serial moniter - temp
+configure lcd
+set position on lcd 0-0
+print to lcd -temp mon sys
+set position on lcd 0-1
+print to lcd -temp value
+set position on 12-1
+print to lcd -temp 

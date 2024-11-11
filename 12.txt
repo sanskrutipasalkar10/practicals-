@@ -1,0 +1,175 @@
+1.
+
+Java Code Implementation
+1. Create the Car Interface
+java
+Copy code
+// Car.java
+public interface Car {
+    void assemble();
+}
+2. Create the Concrete BasicCar Class
+This is the basic car implementation that assembles a standard car.
+
+java
+Copy code
+// BasicCar.java
+public class BasicCar implements Car {
+
+    @Override
+    public void assemble() {
+        System.out.println("Basic Car assembled.");
+    }
+}
+3. Create the CarDecorator Class
+This is an abstract decorator class that implements the Car interface and contains a reference to a Car object. All decorators will extend this class to add their functionality.
+
+java
+Copy code
+// CarDecorator.java
+public abstract class CarDecorator implements Car {
+    protected Car decoratedCar;
+
+    public CarDecorator(Car car) {
+        this.decoratedCar = car;
+    }
+
+    public void assemble() {
+        this.decoratedCar.assemble();
+    }
+}
+4. Create the SportsCarDecorator Class
+This decorator adds sports car features to the basic car.
+
+java
+Copy code
+// SportsCarDecorator.java
+public class SportsCarDecorator extends CarDecorator {
+
+    public SportsCarDecorator(Car car) {
+        super(car);
+    }
+
+    @Override
+    public void assemble() {
+        super.assemble(); // Call the base assemble() method
+        System.out.println("Adding features of Sports Car.");
+        addSportsFeatures();
+    }
+
+    private void addSportsFeatures() {
+        System.out.println("Adding Sports features: Spoilers, Sporty design.");
+    }
+}
+5. Create the LuxuryCarDecorator Class
+This decorator adds luxury car features to the basic car.
+
+java
+Copy code
+// LuxuryCarDecorator.java
+public class LuxuryCarDecorator extends CarDecorator {
+
+    public LuxuryCarDecorator(Car car) {
+        super(car);
+    }
+
+    @Override
+    public void assemble() {
+        super.assemble(); // Call the base assemble() method
+        System.out.println("Adding features of Luxury Car.");
+        addLuxuryFeatures();
+    }
+
+    private void addLuxuryFeatures() {
+        System.out.println("Adding Luxury features: Leather seats, Premium sound system.");
+    }
+}
+6. Create the Client Code to Test the Decorators
+Now we will test the decorators with a BasicCar and apply the SportsCarDecorator and LuxuryCarDecorator.
+
+java
+Copy code
+// DecoratorPatternTest.java
+public class DecoratorPatternTest {
+    public static void main(String[] args) {
+        // Create a basic car
+        Car sportsCar = new SportsCarDecorator(new BasicCar());
+        sportsCar.assemble(); // Assemble the basic car with sports car features
+
+        System.out.println("\n*****");
+
+        // Create a luxury car
+        Car sportsLuxuryCar = new LuxuryCarDecorator(new SportsCarDecorator(new BasicCar()));
+        sportsLuxuryCar.assemble(); // Assemble the basic car with both sports and luxury features
+    }
+}
+Output:
+yaml
+Copy code
+Basic Car assembled.
+Adding features of Sports Car.
+Adding Sports features: Spoilers, Sporty design.
+
+*****
+
+Basic Car assembled.
+Adding features of Sports Car.
+Adding Sports features: Spoilers, Sporty design.
+Adding features of Luxury Car.
+Adding Luxury features: Leather seats, Premium sound system.
+Explanation of the Code:
+Car Interface: Defines the assemble() method, which is implemented by all concrete classes.
+BasicCar: Implements the Car interface and provides the basic functionality for assembling a car.
+CarDecorator: An abstract class that implements the Car interface and has a reference to the Car object. This class allows us to add new functionality to the assemble() method dynamically.
+SportsCarDecorator: Adds specific features related to sports cars, such as spoilers and sporty design, by calling the assemble() method of the wrapped Car object.
+LuxuryCarDecorator: Adds luxury features such as leather seats and a premium sound system.
+DecoratorPatternTest: Demonstrates how decorators can be combined. The SportsCarDecorator and LuxuryCarDecorator can be applied in sequence to a BasicCar, allowing us to create a car with sports and luxury features dynamically.
+Why This is the Decorator Pattern:
+The Decorator Pattern allows us to dynamically add new features to an object without altering its structure. In this case, we can add features to a Car object at runtime using the SportsCarDecorator and LuxuryCarDecorator.
+The decorators (i.e., SportsCarDecorator and LuxuryCarDecorator) "decorate" the basic car with additional functionality, without modifying the original Car implementation (BasicCar).
+This is a classic implementation of the Decorator Pattern, where the behavior of the object is enhanced in a flexible and reusable way.
+
+2.
+
+
+2.
+
+Here's a basic MicroPython code to scan for available Wi-Fi networks:
+
+Python
+import network
+
+def scan_networks():
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    nets = wlan.scan()
+
+    for net in nets:
+        ssid = net[0].decode('utf-8')
+        bssid = net[1]
+        channel = net[2]
+        rssi = net[3] - 100
+        authmode = net[4]
+        hidden = net[5]
+
+        print(f"SSID: {ssid}\nBSSID: {bssid}\nChannel: {channel}\nRSSI: {rssi}\nAuthmode: {authmode}\nHidden: {hidden}\n")
+
+scan_networks()
+Use code with caution.
+
+How to Use This Code on Tinkercad:
+
+Create a New Circuit: Start a new circuit on Tinkercad.
+Add an ESP32 Board: Drag and drop an ESP32 board onto the workspace.
+Write the Code: Use the built-in code editor to input the Python code above.
+Simulate: Click the "Start Simulation" button to run the code.
+Connection Details:
+
+Power: Connect the ESP32 to the 5V power supply on the Tinkercad breadboard.
+Ground: Connect the ground pin of the ESP32 to the ground rail on the breadboard.
+Additional Considerations:
+
+Security: Be cautious when scanning networks, especially in public spaces. Respect network privacy and avoid unauthorized access.
+Network Strength: RSSI (Received Signal Strength Indicator) provides information about the strength of the Wi-Fi signal. A higher RSSI value indicates a stronger signal.
+Authentication: The authmode field indicates the authentication method used by the network (e.g., WPA2-PSK, WPA3-SAE).
+By combining the power of MicroPython and Tinkercad, you can effectively explore network scanning and other IoT concepts.

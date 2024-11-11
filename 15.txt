@@ -1,0 +1,185 @@
+1.
+
+
+Java Code Implementation
+1. Create the Subsystem Classes
+java
+Copy code
+// Amplifier.java
+public class Amplifier {
+    public void on() {
+        System.out.println("Amplifier is ON");
+    }
+    public void off() {
+        System.out.println("Amplifier is OFF");
+    }
+    public void setVolume(int volume) {
+        System.out.println("Amplifier volume set to " + volume);
+    }
+}
+
+// DvdPlayer.java
+public class DvdPlayer {
+    public void on() {
+        System.out.println("DVD Player is ON");
+    }
+    public void off() {
+        System.out.println("DVD Player is OFF");
+    }
+    public void play(String movie) {
+        System.out.println("DVD Player playing \"" + movie + "\"");
+    }
+    public void stop() {
+        System.out.println("DVD Player stopped");
+    }
+}
+
+// Projector.java
+public class Projector {
+    public void on() {
+        System.out.println("Projector is ON");
+    }
+    public void off() {
+        System.out.println("Projector is OFF");
+    }
+    public void setInput(String input) {
+        System.out.println("Projector input set to " + input);
+    }
+}
+
+// Screen.java
+public class Screen {
+    public void down() {
+        System.out.println("Screen is DOWN");
+    }
+    public void up() {
+        System.out.println("Screen is UP");
+    }
+}
+
+// TheaterLights.java
+public class TheaterLights {
+    public void dim(int level) {
+        System.out.println("Theater Lights dimmed to " + level + "%");
+    }
+    public void on() {
+        System.out.println("Theater Lights are ON");
+    }
+}
+2. Create the HomeTheaterFacade Class
+java
+Copy code
+// HomeTheaterFacade.java
+public class HomeTheaterFacade {
+    private Amplifier amp;
+    private DvdPlayer dvd;
+    private Projector projector;
+    private Screen screen;
+    private TheaterLights lights;
+
+    public HomeTheaterFacade(Amplifier amp, DvdPlayer dvd, Projector projector, Screen screen, TheaterLights lights) {
+        this.amp = amp;
+        this.dvd = dvd;
+        this.projector = projector;
+        this.screen = screen;
+        this.lights = lights;
+    }
+
+    public void watchMovie(String movie) {
+        System.out.println("Get ready to watch a movie...");
+        lights.dim(10);
+        screen.down();
+        projector.on();
+        projector.setInput("DVD");
+        amp.on();
+        amp.setVolume(5);
+        dvd.on();
+        dvd.play(movie);
+    }
+
+    public void endMovie() {
+        System.out.println("Shutting movie theater down...");
+        lights.on();
+        screen.up();
+        projector.off();
+        amp.off();
+        dvd.stop();
+        dvd.off();
+    }
+}
+3. Create the Client Code
+java
+Copy code
+// HomeTheaterTest.java
+public class HomeTheaterTest {
+    public static void main(String[] args) {
+        // Create subsystem components
+        Amplifier amp = new Amplifier();
+        DvdPlayer dvd = new DvdPlayer();
+        Projector projector = new Projector();
+        Screen screen = new Screen();
+        TheaterLights lights = new TheaterLights();
+
+        // Create the facade
+        HomeTheaterFacade homeTheater = new HomeTheaterFacade(amp, dvd, projector, screen, lights);
+
+        // Use the facade to watch a movie
+        homeTheater.watchMovie("The Matrix");
+        
+        // Use the facade to end the movie
+        homeTheater.endMovie();
+    }
+}
+Output:
+vbnet
+Copy code
+Get ready to watch a movie...
+Theater Lights dimmed to 10%
+Screen is DOWN
+Projector is ON
+Projector input set to DVD
+Amplifier is ON
+Amplifier volume set to 5
+DVD Player is ON
+DVD Player playing "The Matrix"
+Shutting movie theater down...
+Theater Lights are ON
+Screen is UP
+Projector is OFF
+Amplifier is OFF
+DVD Player stopped
+DVD Player is OFF
+Explanation:
+Subsystem Classes: Amplifier, DvdPlayer, Projector, Screen, and TheaterLights represent the components of the home theater system.
+Facade Class: HomeTheaterFacade provides a simplified interface for the client to control the complex subsystem. It has methods like watchMovie() and endMovie() that coordinate the actions of the subsystems.
+Client Code: The HomeTheaterTest class creates instances of the subsystems and the facade. It uses the HomeTheaterFacade to start and end a movie with simple method calls.
+Why This is the Facade Pattern:
+The Facade Pattern simplifies the interaction between the client and the complex subsystem by providing a unified interface (HomeTheaterFacade).
+This pattern promotes loose coupling between the client and the subsystems, making the system easier to use and maintain.
+
+
+2.
+
+components
+piezo buzzer
+2- led 2- resistor
+bb mini
+ardino
+pir sensor
+
+connection
+bb - led - resistor- gnd
+          -D6, D7
+buzzer- +ve- D10
+        -ve- GND
+pir - GND-GND
+      Power- 5v
+      Signal- A0
+
+
+pir read- Analong pin
+print serial motor
+if else
+set pin -3 7,6,10 lhh
+else
+set pin -3 7,6,10 hll

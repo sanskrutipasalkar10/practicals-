@@ -1,0 +1,146 @@
+Java Program: Weather Station Using java.util.Observable
+java
+Copy code
+import java.util.Observable;
+import java.util.Observer;
+
+// WeatherData class that extends Observable
+class WeatherData extends Observable {
+    private float temperature;
+    private float humidity;
+    private float pressure;
+
+    // Method to set new measurements
+    public void setMeasurements(float temperature, float humidity, float pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        measurementsChanged();
+    }
+
+    // Method to notify observers when measurements change
+    private void measurementsChanged() {
+        setChanged();  // Marks the observable as having changed
+        notifyObservers();  // Notifies all registered observers
+    }
+
+    // Getter methods for the weather data
+    public float getTemperature() {
+        return temperature;
+    }
+
+    public float getHumidity() {
+        return humidity;
+    }
+
+    public float getPressure() {
+        return pressure;
+    }
+}
+
+// Display class that implements Observer
+class CurrentConditionsDisplay implements Observer {
+    private float temperature;
+    private float humidity;
+    private float pressure;
+    private Observable weatherData;
+
+    public CurrentConditionsDisplay(Observable weatherData) {
+        this.weatherData = weatherData;
+        weatherData.addObserver(this);  // Register this display as an observer
+    }
+
+    // This method will be called when the weather data changes
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof WeatherData) {
+            WeatherData weatherData = (WeatherData) o;
+            this.temperature = weatherData.getTemperature();
+            this.humidity = weatherData.getHumidity();
+            this.pressure = weatherData.getPressure();
+            display();
+        }
+    }
+
+    // Display the current weather conditions
+    public void display() {
+        System.out.println("Current conditions: ");
+        System.out.println("Temperature: " + temperature + "°C");
+        System.out.println("Humidity: " + humidity + "%");
+        System.out.println("Pressure: " + pressure + " hPa");
+    }
+}
+
+// Main class to test the Weather Station
+public class WeatherStation {
+    public static void main(String[] args) {
+        // Create the weather data object
+        WeatherData weatherData = new WeatherData();
+        
+        // Create a display that observes the weather data
+        CurrentConditionsDisplay currentDisplay = new CurrentConditionsDisplay(weatherData);
+        
+        // Simulate changing weather conditions
+        System.out.println("Weather station is updating measurements...");
+        weatherData.setMeasurements(25.0f, 65.0f, 1013.0f);  // Temperature, Humidity, Pressure
+        weatherData.setMeasurements(22.0f, 70.0f, 1012.5f);
+        weatherData.setMeasurements(30.0f, 60.0f, 1010.0f);
+    }
+}
+Explanation of the Code:
+WeatherData (Observable class):
+
+The WeatherData class extends Observable. It contains three instance variables: temperature, humidity, and pressure, which represent the measurements of the weather station.
+The setMeasurements() method is used to set new values for temperature, humidity, and pressure, and it calls measurementsChanged(), which notifies all registered observers that the data has changed.
+The getTemperature(), getHumidity(), and getPressure() methods are provided to access the current values of temperature, humidity, and pressure.
+CurrentConditionsDisplay (Observer class):
+
+The CurrentConditionsDisplay class implements the Observer interface. It registers itself as an observer of the WeatherData object.
+The update() method is called whenever the WeatherData object notifies its observers of a change in the weather conditions.
+The display() method is responsible for displaying the current weather conditions.
+Main Class (WeatherStation):
+
+In the main() method, an instance of WeatherData is created, and a CurrentConditionsDisplay object is created, which observes the WeatherData object.
+The setMeasurements() method of WeatherData is called several times with different values to simulate changing weather conditions. Each time the measurements change, the CurrentConditionsDisplay is updated automatically.
+Output:
+yaml
+Copy code
+Weather station is updating measurements...
+Current conditions: 
+Temperature: 25.0°C
+Humidity: 65.0%
+Pressure: 1013.0 hPa
+Current conditions: 
+Temperature: 22.0°C
+Humidity: 70.0%
+Pressure: 1012.5 hPa
+Current conditions: 
+Temperature: 30.0°C
+Humidity: 60.0%
+Pressure: 1010.0 hPa
+Key Points:
+Observable: The WeatherData class extends Observable, which allows it to notify registered observers whenever the weather conditions change.
+Observer: The CurrentConditionsDisplay class implements Observer and is updated whenever the WeatherData object notifies its observers.
+Decoupling: The observer pattern decouples the WeatherData class from the CurrentConditionsDisplay class, allowing multiple displays to observe the weather data and respond to changes.
+
+
+2.
+
+components
+ardiuno  A0- photo resi-terminal1 
+        5v- terminal 2
+photoresistor- resistor- gnd
+               
+led- resistor-gnd
+     D10
+2-resistor
+
+code
+var-ldr
+set ldr-read analog A0
+print to serial mon -ldr
+if else
+math block - ldr var  <500
+set pin 10 high
+else
+set pin 10 low

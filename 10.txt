@@ -1,0 +1,306 @@
+1. 
+Java Program Implementation
+1. Create FlyBehavior Interface
+java
+Copy code
+public interface FlyBehavior {
+    void fly();
+}
+2. Create Concrete Classes for Flying Behaviors
+java
+Copy code
+public class FlyWithWings implements FlyBehavior {
+    @Override
+    public void fly() {
+        System.out.println("I'm flying with wings!");
+    }
+}
+
+public class FlyNoWay implements FlyBehavior {
+    @Override
+    public void fly() {
+        System.out.println("I can't fly.");
+    }
+}
+
+public class FlyRocketPowered implements FlyBehavior {
+    @Override
+    public void fly() {
+        System.out.println("I'm flying with a rocket!");
+    }
+}
+3. Create QuackBehavior Interface
+java
+Copy code
+public interface QuackBehavior {
+    void quack();
+}
+4. Create Concrete Classes for Quacking Behaviors
+java
+Copy code
+public class Quack implements QuackBehavior {
+    @Override
+    public void quack() {
+        System.out.println("Quack!");
+    }
+}
+
+public class MuteQuack implements QuackBehavior {
+    @Override
+    public void quack() {
+        System.out.println("<< Silence >>");
+    }
+}
+
+public class Squeak implements QuackBehavior {
+    @Override
+    public void quack() {
+        System.out.println("Squeak!");
+    }
+}
+5. Create the Duck Class
+The Duck class will hold the current flying and quacking behaviors. It delegates the actions to the behavior interfaces.
+
+java
+Copy code
+public abstract class Duck {
+    protected FlyBehavior flyBehavior;
+    protected QuackBehavior quackBehavior;
+
+    public Duck() {}
+
+    // Duck performs fly action
+    public void performFly() {
+        flyBehavior.fly();
+    }
+
+    // Duck performs quack action
+    public void performQuack() {
+        quackBehavior.quack();
+    }
+
+    // Duck can swim (common behavior for all ducks)
+    public void swim() {
+        System.out.println("All ducks can swim!");
+    }
+
+    // Set the flying behavior dynamically
+    public void setFlyBehavior(FlyBehavior flyBehavior) {
+        this.flyBehavior = flyBehavior;
+    }
+
+    // Set the quacking behavior dynamically
+    public void setQuackBehavior(QuackBehavior quackBehavior) {
+        this.quackBehavior = quackBehavior;
+    }
+
+    // Abstract method to display the duck type
+    public abstract void display();
+}
+6. Create Concrete Duck Classes
+Now, create some specific duck types that will use different behaviors.
+
+java
+Copy code
+public class MallardDuck extends Duck {
+    public MallardDuck() {
+        flyBehavior = new FlyWithWings();
+        quackBehavior = new Quack();
+    }
+
+    @Override
+    public void display() {
+        System.out.println("I'm a Mallard Duck.");
+    }
+}
+
+public class ModelDuck extends Duck {
+    public ModelDuck() {
+        flyBehavior = new FlyNoWay();  // Default behavior
+        quackBehavior = new MuteQuack();  // Default behavior
+    }
+
+    @Override
+    public void display() {
+        System.out.println("I'm a model duck.");
+    }
+}
+7. Test the Strategy Pattern
+Finally, create a DuckTest class to test the behavior of ducks and how the strategies work.
+
+java
+Copy code
+public class DuckTest {
+    public static void main(String[] args) {
+        // Create Mallard Duck (it will fly with wings and quack)
+        Duck mallard = new MallardDuck();
+        mallard.display();
+        mallard.performFly();
+        mallard.performQuack();
+
+        System.out.println("\nChanging behavior dynamically:");
+
+        // Change Mallard Duck's flying behavior dynamically
+        mallard.setFlyBehavior(new FlyRocketPowered());
+        mallard.performFly();  // Now it flies with a rocket!
+
+        // Create Model Duck (it can't fly and is mute by default)
+        Duck model = new ModelDuck();
+        model.display();
+        model.performFly();   // Can't fly
+        model.performQuack(); // Silent quack
+
+        System.out.println("\nChanging behavior dynamically for Model Duck:");
+
+        // Change Model Duck's behavior dynamically
+        model.setFlyBehavior(new FlyWithWings());
+        model.setQuackBehavior(new Quack());
+
+        model.performFly();   // Now it flies with wings
+        model.performQuack(); // Now it quacks
+    }
+}
+
+
+
+2.
+
+a) Printing a Name 'n' Times
+
+Using a for loop:
+
+Python
+name = input("Enter a name: ")
+n = int(input("Enter the number of times to print: "))
+
+for i in range(n):
+    print(name)
+Use code with caution.
+
+Using a while loop:
+
+Python
+name = input("Enter a name: ")
+n = int(input("Enter the number of times to print: "))
+
+i = 0
+while i < n:
+    print(name)
+    i += 1
+Use code with caution.
+
+b) Handling Divided by Zero Exception
+
+Python
+def divide(a, b):
+    try:
+        result = a / b
+        print("Result:", result)
+    except ZeroDivisionError:
+        print("Error: Division by zero")
+
+num1 = float(input("Enter the first number: "))
+num2 = float(input("Enter the second number: "))
+
+divide(num1, num2)
+Use code with caution.
+
+c) Printing Current Time for 10 Times
+
+Python
+import time
+
+for i in range(10):
+    current_time = time.strftime("%H:%M:%S")
+    print(current_time)
+    time.sleep(10)
+Use code with caution.
+
+d) Reading a File Line by Line and Counting Words
+
+Python
+def count_words(line):
+    words = line.split()
+    return len(words)
+
+filename = input("Enter the filename: ")
+
+try:
+    with open(filename, 'r') as file:
+        for line in file:
+            word_count = count_words(line)
+            print("Word count in the line:", word_count)
+except FileNotFoundError:
+    print("File not found.")
+Use code with caution.
+
+To run these Python scripts on your Raspberry Pi:
+
+Open a Terminal: Connect to your Raspberry Pi via SSH or use a physical keyboard and monitor.
+Open a Text Editor: Use a text editor like nano or vim to create a new Python file.
+Write the Code: Paste the desired code into the file.
+Save the File: Save the file with a .py extension (e.g., name_printer.py).
+Run the Script: Use the python command to execute the script:
+Bash
+python name_printer.py
+
+
+
+2.
+
+
+2
+
+Understanding the Task
+
+To connect to Wi-Fi using Arduino, we'll need a board that supports Wi-Fi, like the ESP32. We'll use MicroPython to program the ESP32 and connect to a Wi-Fi network.
+
+Required Components on Tinkercad:
+
+ESP32 Board: This will serve as our microcontroller.
+MicroPython Code:
+
+Python
+import network
+
+def connect_to_wifi(ssid, password):
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(ssid, password)
+
+    while wlan.isconnected() == False:   
+
+        print("Connecting to Wi-Fi...")
+        time.sleep(1)
+
+    print("Connected to Wi-Fi")
+    print(wlan.ifconfig())
+
+# Replace 'your_ssid' and 'your_password' with your actual Wi-Fi credentials
+ssid = 'your_ssid'
+password = 'your_password'
+
+connect_to_wifi(ssid, password)
+Use code with caution.
+
+How to Use on Tinkercad:
+
+Create a New Circuit: Start a new circuit on Tinkercad.
+Add Components: Add the ESP32 board to the workspace.
+Write Code: Use the built-in code editor to input the MicroPython code.
+Simulate: Click the "Start Simulation" button to run the code.
+Explanation:
+
+Import Network Module: Imports the network module to handle Wi-Fi connections.
+Connect to Wi-Fi Function:
+Activates the Wi-Fi interface.
+Connects to the specified Wi-Fi network with the given SSID and password.
+Waits for the connection to be established.
+Prints the IP address and other network information.
+Wi-Fi Credentials: Replace 'your_ssid' and 'your_password' with your actual Wi-Fi credentials.
+Connect: Calls the connect_to_wifi function with your Wi-Fi credentials.
+Note:
+
+Ensure that your Wi-Fi network is within range and has a stable connection.
+The ESP32 board should be powered correctly.
+For more advanced Wi-Fi operations, you can explore other features provided by the network module.

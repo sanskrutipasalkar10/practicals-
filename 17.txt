@@ -1,0 +1,157 @@
+1.
+
+Java Code Implementation
+1. Define the Shape Interface and Concrete Classes
+java
+Copy code
+// Shape.java
+public interface Shape {
+    void draw();
+}
+
+// Circle.java
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Circle");
+    }
+}
+
+// Rectangle.java
+public class Rectangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Rectangle");
+    }
+}
+
+// Square.java
+public class Square implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Square");
+    }
+}
+2. Create the AbstractFactory Interface
+java
+Copy code
+// AbstractFactory.java
+public interface AbstractFactory {
+    Shape getShape(String shapeType);
+}
+3. Implement Concrete Factory Classes
+java
+Copy code
+// ShapeFactory2D.java
+public class ShapeFactory2D implements AbstractFactory {
+    @Override
+    public Shape getShape(String shapeType) {
+        if (shapeType == null) {
+            return null;
+        }
+        if (shapeType.equalsIgnoreCase("CIRCLE")) {
+            return new Circle();
+        } else if (shapeType.equalsIgnoreCase("RECTANGLE")) {
+            return new Rectangle();
+        } else if (shapeType.equalsIgnoreCase("SQUARE")) {
+            return new Square();
+        }
+        return null;
+    }
+}
+
+// ShapeFactory3D.java (For demonstration, assuming 3D shapes exist)
+public class ShapeFactory3D implements AbstractFactory {
+    @Override
+    public Shape getShape(String shapeType) {
+        if (shapeType == null) {
+            return null;
+        }
+        if (shapeType.equalsIgnoreCase("SPHERE")) {
+            // Return a new Sphere() if implemented
+            System.out.println("Creating a 3D Sphere (mock)");
+        } else if (shapeType.equalsIgnoreCase("CUBE")) {
+            // Return a new Cube() if implemented
+            System.out.println("Creating a 3D Cube (mock)");
+        }
+        return null;
+    }
+}
+4. Create the FactoryProducer Class
+java
+Copy code
+// FactoryProducer.java
+public class FactoryProducer {
+    public static AbstractFactory getFactory(String factoryType) {
+        if (factoryType.equalsIgnoreCase("2D")) {
+            return new ShapeFactory2D();
+        } else if (factoryType.equalsIgnoreCase("3D")) {
+            return new ShapeFactory3D();
+        }
+        return null;
+    }
+}
+5. Write the Client Code
+java
+Copy code
+// AbstractFactoryPatternTest.java
+public class AbstractFactoryPatternTest {
+    public static void main(String[] args) {
+        // Get a 2D shape factory
+        AbstractFactory shapeFactory2D = FactoryProducer.getFactory("2D");
+        
+        // Create and draw a Circle
+        Shape shape1 = shapeFactory2D.getShape("CIRCLE");
+        shape1.draw();
+        
+        // Create and draw a Rectangle
+        Shape shape2 = shapeFactory2D.getShape("RECTANGLE");
+        shape2.draw();
+        
+        // Create and draw a Square
+        Shape shape3 = shapeFactory2D.getShape("SQUARE");
+        shape3.draw();
+
+        // For demonstration, try a 3D shape factory
+        AbstractFactory shapeFactory3D = FactoryProducer.getFactory("3D");
+        shapeFactory3D.getShape("SPHERE");
+        shapeFactory3D.getShape("CUBE");
+    }
+}
+Output:
+mathematica
+Copy code
+Drawing a Circle
+Drawing a Rectangle
+Drawing a Square
+Creating a 3D Sphere (mock)
+Creating a 3D Cube (mock)
+Explanation:
+Abstract Factory Interface: AbstractFactory defines a method getShape() for creating shapes.
+Concrete Factories: ShapeFactory2D and ShapeFactory3D create instances of 2D and 3D shapes respectively.
+Factory Producer: FactoryProducer provides the factory based on user input ("2D" or "3D").
+Client Code: Uses the FactoryProducer to get the appropriate factory and create shape instances, demonstrating the use of the Abstract Factory Pattern.
+Benefits of Using the Abstract Factory Pattern:
+Encapsulation of Object Creation: Client code is decoupled from the specific creation process.
+Flexibility: Easy to add new factories and shape types without changing existing code.
+Consistency: Ensures that related objects are created in a consistent manner.
+
+
+2.
+
+components-
+lcd- sda scl-A4,A5
+arduino
+temp sensor- power -5v
+             vout-A0
+             gnd- gnd
+
+set temp- map(read analog pin AO(-20)(*3.04)to Range -20 120
+print serial moniter - temp
+configure lcd
+set position on lcd 0-0
+print to lcd -temp mon sys
+set position on lcd 0-1
+print to lcd -temp value
+set position on 12-1
+print to lcd -temp 

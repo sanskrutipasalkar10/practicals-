@@ -1,0 +1,112 @@
+1.
+
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Vector;
+
+// Adapter class that converts Enumeration to Iterator
+class EnumerationIteratorAdapter implements Iterator<Object> {
+    private Enumeration<?> enumeration;
+
+    public EnumerationIteratorAdapter(Enumeration<?> enumeration) {
+        this.enumeration = enumeration;
+    }
+
+    // Check if there are more elements in the enumeration
+    @Override
+    public boolean hasNext() {
+        return enumeration.hasMoreElements();
+    }
+
+    // Retrieve the next element from the enumeration
+    @Override
+    public Object next() {
+        return enumeration.nextElement();
+    }
+
+    // Not supported in this adapter
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("remove operation is not supported");
+    }
+}
+
+public class AdapterPatternExample {
+    public static void main(String[] args) {
+        // Create a Vector (which implements Enumeration) and add some elements
+        Vector<String> vector = new Vector<>();
+        vector.add("Apple");
+        vector.add("Banana");
+        vector.add("Cherry");
+        
+        // Get the Enumeration from the Vector
+        Enumeration<String> enumeration = vector.elements();
+        
+        // Create the Adapter to convert Enumeration to Iterator
+        Iterator<Object> iterator = new EnumerationIteratorAdapter(enumeration);
+
+        // Use the Iterator to iterate over the elements
+        System.out.println("Iterating using Iterator (after Adapter):");
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+}
+
+
+2
+
+Understanding the Task
+
+To connect to Wi-Fi using Arduino, we'll need a board that supports Wi-Fi, like the ESP32. We'll use MicroPython to program the ESP32 and connect to a Wi-Fi network.
+
+Required Components on Tinkercad:
+
+ESP32 Board: This will serve as our microcontroller.
+MicroPython Code:
+
+Python
+import network
+
+def connect_to_wifi(ssid, password):
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(ssid, password)
+
+    while wlan.isconnected() == False:   
+
+        print("Connecting to Wi-Fi...")
+        time.sleep(1)
+
+    print("Connected to Wi-Fi")
+    print(wlan.ifconfig())
+
+# Replace 'your_ssid' and 'your_password' with your actual Wi-Fi credentials
+ssid = 'your_ssid'
+password = 'your_password'
+
+connect_to_wifi(ssid, password)
+Use code with caution.
+
+How to Use on Tinkercad:
+
+Create a New Circuit: Start a new circuit on Tinkercad.
+Add Components: Add the ESP32 board to the workspace.
+Write Code: Use the built-in code editor to input the MicroPython code.
+Simulate: Click the "Start Simulation" button to run the code.
+Explanation:
+
+Import Network Module: Imports the network module to handle Wi-Fi connections.
+Connect to Wi-Fi Function:
+Activates the Wi-Fi interface.
+Connects to the specified Wi-Fi network with the given SSID and password.
+Waits for the connection to be established.
+Prints the IP address and other network information.
+Wi-Fi Credentials: Replace 'your_ssid' and 'your_password' with your actual Wi-Fi credentials.
+Connect: Calls the connect_to_wifi function with your Wi-Fi credentials.
+Note:
+
+Ensure that your Wi-Fi network is within range and has a stable connection.
+The ESP32 board should be powered correctly.
+For more advanced Wi-Fi operations, you can explore other features provided by the network module.
+By following these steps and understanding the code, you can effectively simulate and test your Wi-Fi connection on Tinkercad.

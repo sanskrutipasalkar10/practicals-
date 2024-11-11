@@ -1,0 +1,214 @@
+1.
+
+
+Java Code Implementation
+1. Create the Command Interface
+java
+Copy code
+// Command.java
+public interface Command {
+    void execute();
+}
+2. Create the Light Class and Command Implementations
+java
+Copy code
+// Light.java
+public class Light {
+    public void on() {
+        System.out.println("Light is ON");
+    }
+
+    public void off() {
+        System.out.println("Light is OFF");
+    }
+}
+
+// LightOnCommand.java
+public class LightOnCommand implements Command {
+    private Light light;
+
+    public LightOnCommand(Light light) {
+        this.light = light;
+    }
+
+    @Override
+    public void execute() {
+        light.on();
+    }
+}
+
+// LightOffCommand.java
+public class LightOffCommand implements Command {
+    private Light light;
+
+    public LightOffCommand(Light light) {
+        this.light = light;
+    }
+
+    @Override
+    public void execute() {
+        light.off();
+    }
+}
+3. Create the GarageDoor Class and Command Implementation
+java
+Copy code
+// GarageDoor.java
+public class GarageDoor {
+    public void up() {
+        System.out.println("Garage Door is OPEN");
+    }
+
+    public void down() {
+        System.out.println("Garage Door is CLOSED");
+    }
+}
+
+// GarageDoorUpCommand.java
+public class GarageDoorUpCommand implements Command {
+    private GarageDoor garageDoor;
+
+    public GarageDoorUpCommand(GarageDoor garageDoor) {
+        this.garageDoor = garageDoor;
+    }
+
+    @Override
+    public void execute() {
+        garageDoor.up();
+    }
+}
+4. Create the Stereo Class and Command Implementation
+java
+Copy code
+// Stereo.java
+public class Stereo {
+    public void on() {
+        System.out.println("Stereo is ON");
+    }
+
+    public void off() {
+        System.out.println("Stereo is OFF");
+    }
+
+    public void setCD() {
+        System.out.println("Stereo is set for CD input");
+    }
+
+    public void setVolume(int volume) {
+        System.out.println("Stereo volume set to " + volume);
+    }
+}
+
+// StereoOnWithCDCommand.java
+public class StereoOnWithCDCommand implements Command {
+    private Stereo stereo;
+
+    public StereoOnWithCDCommand(Stereo stereo) {
+        this.stereo = stereo;
+    }
+
+    @Override
+    public void execute() {
+        stereo.on();
+        stereo.setCD();
+        stereo.setVolume(10);
+    }
+}
+5. Create the RemoteControl Class (Invoker)
+java
+Copy code
+// RemoteControl.java
+public class RemoteControl {
+    private Command command;
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public void pressButton() {
+        command.execute();
+    }
+}
+6. Create the Client Code
+java
+Copy code
+// CommandPatternTest.java
+public class CommandPatternTest {
+    public static void main(String[] args) {
+        // Create receivers
+        Light livingRoomLight = new Light();
+        GarageDoor garageDoor = new GarageDoor();
+        Stereo stereo = new Stereo();
+
+        // Create command objects
+        Command lightOn = new LightOnCommand(livingRoomLight);
+        Command lightOff = new LightOffCommand(livingRoomLight);
+        Command garageDoorUp = new GarageDoorUpCommand(garageDoor);
+        Command stereoOnWithCD = new StereoOnWithCDCommand(stereo);
+
+        // Create the invoker (remote control)
+        RemoteControl remoteControl = new RemoteControl();
+
+        // Test light on command
+        remoteControl.setCommand(lightOn);
+        remoteControl.pressButton();
+
+        // Test light off command
+        remoteControl.setCommand(lightOff);
+        remoteControl.pressButton();
+
+        // Test garage door up command
+        remoteControl.setCommand(garageDoorUp);
+        remoteControl.pressButton();
+
+        // Test stereo on with CD command
+        remoteControl.setCommand(stereoOnWithCD);
+        remoteControl.pressButton();
+    }
+}
+Output:
+vbnet
+Copy code
+Light is ON
+Light is OFF
+Garage Door is OPEN
+Stereo is ON
+Stereo is set for CD input
+Stereo volume set to 10
+Explanation:
+Command Interface: The Command interface defines a common execute() method for all concrete command classes.
+Concrete Command Classes: Implement the Command interface and define the actions that should be taken on the respective receivers.
+Receivers: The classes like Light, GarageDoor, and Stereo contain the actual implementation of the actions.
+Invoker: The RemoteControl class holds a reference to a Command and can call its execute() method to perform the action.
+Client Code: Demonstrates how the invoker and command objects interact to execute different commands.
+Why This is the Command Pattern:
+The Command Pattern encapsulates a request as an object, thereby decoupling the sender (remote control) and receiver (e.g., Light, GarageDoor, Stereo).
+It provides the flexibility to add new commands without altering the existing code, making the design extensible.
+
+2.2.
+
+components:
+arudino
+breadboard mini -2
+npn transistor
+2 led 3-resistors 
+vibration motor
+
+connection:
+npn transistor -bb1- collector= vibration motor- -ve  +ve- 5v ard
+                      base = resistor- D11
+                       emmiter=ard-gnd
+bb2- led resistor -gnd
+         d6,d7
+
+
+set pin H L
+set pin H L         
+set pin H L
+wait
+set pin H L
+set pin H L         
+set pin H L
+wait
+
+

@@ -1,0 +1,181 @@
+1.
+
+Java Code Implementation
+1. Create the Observer Interface
+java
+Copy code
+// Observer.java
+public interface Observer {
+    void update(int number);
+}
+2. Create the NumberSubject Class (Observable)
+java
+Copy code
+// NumberSubject.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class NumberSubject {
+    private List<Observer> observers = new ArrayList<>();
+    private int number;
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+        notifyObservers();
+    }
+
+    private void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(number);
+        }
+    }
+}
+3. Create Concrete Observer Classes
+java
+Copy code
+// HexObserver.java
+public class HexObserver implements Observer {
+    @Override
+    public void update(int number) {
+        System.out.println("Hexadecimal: " + Integer.toHexString(number).toUpperCase());
+    }
+}
+
+// OctalObserver.java
+public class OctalObserver implements Observer {
+    @Override
+    public void update(int number) {
+        System.out.println("Octal: " + Integer.toOctalString(number));
+    }
+}
+
+// BinaryObserver.java
+public class BinaryObserver implements Observer {
+    @Override
+    public void update(int number) {
+        System.out.println("Binary: " + Integer.toBinaryString(number));
+    }
+}
+4. Create the Client Code
+java
+Copy code
+// ObserverPatternTest.java
+import java.util.Scanner;
+
+public class ObserverPatternTest {
+    public static void main(String[] args) {
+        NumberSubject numberSubject = new NumberSubject();
+
+        // Add observers
+        Observer hexObserver = new HexObserver();
+        Observer octalObserver = new OctalObserver();
+        Observer binaryObserver = new BinaryObserver();
+
+        numberSubject.addObserver(hexObserver);
+        numberSubject.addObserver(octalObserver);
+        numberSubject.addObserver(binaryObserver);
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.print("Enter a number (or -1 to exit): ");
+            int number = scanner.nextInt();
+            if (number == -1) {
+                break;
+            }
+            numberSubject.setNumber(number);
+        }
+
+        scanner.close();
+    }
+}
+Explanation:
+Observer Interface: Observer defines an update() method, which is called when the NumberSubject changes.
+NumberSubject Class: Maintains a list of observers and notifies them whenever the number changes.
+Concrete Observers: HexObserver, OctalObserver, and BinaryObserver implement the Observer interface and display the number in different formats.
+Client Code: Accepts a number from the user, updates the NumberSubject, and triggers notifications to all registered observers.
+Sample Output:
+vbnet
+Copy code
+Enter a number (or -1 to exit): 15
+Hexadecimal: F
+Octal: 17
+Binary: 1111
+Enter a number (or -1 to exit): 25
+Hexadecimal: 19
+Octal: 31
+Binary: 11001
+Enter a number (or -1 to exit): -1
+How the Observer Pattern is Used:
+The NumberSubject class acts as the observable object.
+The HexObserver, OctalObserver, and BinaryObserver are observers that react whenever the NumberSubject is updated.
+This decouples the NumberSubject from the logic of updating the different formats, adhering to the Observer Design Pattern.
+
+
+
+2.
+
+2
+
+Understanding the Task
+
+To connect to Wi-Fi using Arduino, we'll need a board that supports Wi-Fi, like the ESP32. We'll use MicroPython to program the ESP32 and connect to a Wi-Fi network.
+
+Required Components on Tinkercad:
+
+ESP32 Board: This will serve as our microcontroller.
+MicroPython Code:
+
+Python
+import network
+
+def connect_to_wifi(ssid, password):
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(ssid, password)
+
+    while wlan.isconnected() == False:   
+
+        print("Connecting to Wi-Fi...")
+        time.sleep(1)
+
+    print("Connected to Wi-Fi")
+    print(wlan.ifconfig())
+
+# Replace 'your_ssid' and 'your_password' with your actual Wi-Fi credentials
+ssid = 'your_ssid'
+password = 'your_password'
+
+connect_to_wifi(ssid, password)
+Use code with caution.
+
+How to Use on Tinkercad:
+
+Create a New Circuit: Start a new circuit on Tinkercad.
+Add Components: Add the ESP32 board to the workspace.
+Write Code: Use the built-in code editor to input the MicroPython code.
+Simulate: Click the "Start Simulation" button to run the code.
+Explanation:
+
+Import Network Module: Imports the network module to handle Wi-Fi connections.
+Connect to Wi-Fi Function:
+Activates the Wi-Fi interface.
+Connects to the specified Wi-Fi network with the given SSID and password.
+Waits for the connection to be established.
+Prints the IP address and other network information.
+Wi-Fi Credentials: Replace 'your_ssid' and 'your_password' with your actual Wi-Fi credentials.
+Connect: Calls the connect_to_wifi function with your Wi-Fi credentials.
+Note:
+
+Ensure that your Wi-Fi network is within range and has a stable connection.
+The ESP32 board should be powered correctly.
+For more advanced Wi-Fi operations, you can explore other features provided by the network module.
+By following these steps and understanding the cod

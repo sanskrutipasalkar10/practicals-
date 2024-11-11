@@ -1,0 +1,163 @@
+1.
+
+import java.io.*;
+
+// Component: A basic reader that reads characters
+class MyReader extends Reader {
+    private final Reader in;
+
+    public MyReader(Reader in) {
+        this.in = in;
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        return in.read(cbuf, off, len);
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+    }
+}
+
+// Decorator: A decorator to convert uppercase letters to lowercase
+class LowerCaseDecorator extends Reader {
+    private final Reader in;
+
+    public LowerCaseDecorator(Reader in) {
+        this.in = in;
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        int numCharsRead = in.read(cbuf, off, len);
+        for (int i = off; i < off + numCharsRead; i++) {
+            cbuf[i] = Character.toLowerCase(cbuf[i]);
+        }
+        return numCharsRead;
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+    }
+}
+
+// Driver class to test the decorator pattern
+public class IODecoratorExample {
+    public static void main(String[] args) {
+        String inputString = "HELLO WORLD! JAVA IS AWESOME!";
+        
+        // Create an InputStream to simulate file or user input
+        Reader reader = new StringReader(inputString);
+        
+        // Apply the decorator to convert all characters to lowercase
+        Reader decoratedReader = new LowerCaseDecorator(reader);
+        
+        try {
+            char[] buffer = new char[1024];
+            int numCharsRead;
+            
+            // Reading from the decorated reader
+            while ((numCharsRead = decoratedReader.read(buffer, 0, buffer.length)) != -1) {
+                System.out.print(new String(buffer, 0, numCharsRead));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                decoratedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
+
+2.
+
+a) Reading Name and Printing Hello Message
+
+Python
+name = input("Enter your name: ")
+print("Hello,", name + "!")
+Use code with caution.
+
+b) Reading Two Numbers and Performing Arithmetic Operations
+
+Python
+num1 = float(input("Enter the first number: "))
+num2 = float(input("Enter the second number: "))
+
+sum = num1 + num2
+difference = num1 - num2
+product = num1 * num2
+division = num1 / num2   
+
+
+print("Sum:", sum)
+print("Difference:", difference)
+print("Product:", product)
+print("Division:", division)
+Use code with caution.
+
+c) Word and Character Count of a String
+
+Python
+text = input("Enter a string: ")
+
+words = text.split()
+word_count = len(words)
+character_count = len(text)
+
+print("Word count:", word_count)
+print("Character count:", character_count)
+Use code with caution.
+
+d) Calculating Area of Different Shapes
+
+Python
+shape = input("Enter the shape (rectangle, triangle, circle): ")
+
+if shape == "rectangle":
+    length = float(input("Enter the length: "))
+    width = float(input("Enter the width: "))
+    area = length * width
+    print("Area of rectangle:", area)
+
+elif shape == "triangle":
+    base = float(input("Enter the base: "))
+    height = float(input("Enter the height: "))
+    area = 0.5 * base * height
+    print("Area of triangle:", area)
+
+elif shape == "circle":
+    radius = float(input("Enter the radius: "))
+    area = 3.14159 * radius * radius
+    print("Area of circle:", area)
+
+else:
+    print("Invalid shape")
+Use code with caution.
+
+To run these Python scripts on your Raspberry Pi:
+
+Open a Terminal: Connect to your Raspberry Pi via SSH or use a physical keyboard and monitor.
+Open a Text Editor: Use a text editor like nano or vim to create a new Python file.
+Write the Code: Paste the desired code into the file.
+Save the File: Save the file with a .py extension (e.g., hello.py).
+Run the Script: Use the python command to execute the script:
+Bash
+python hello.py
+Use code with caution.
+
+Additional Tips:
+
+Install Required Packages: Ensure you have the necessary packages installed. For example, you might need to install the math module for more complex calculations.
+Error Handling: Consider using try-except blocks to handle potential errors, such as invalid input or division by zero.
+Input Validation: You can add input validation to check if the user has entered valid data.
+User-Friendly Interface: You can create a more user-friendly interface using modules like tkinter for graphical user interfaces or cmd for command-line interfaces.
+By following these steps and incorporating additional features, you can create more sophisticated Python programs on your Raspberry Pi

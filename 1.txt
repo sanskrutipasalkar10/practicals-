@@ -1,0 +1,120 @@
+1.
+
+import java.io.*;
+
+// Component: A basic reader that reads characters
+class MyReader extends Reader {
+    private final Reader in;
+
+    public MyReader(Reader in) {
+        this.in = in;
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        return in.read(cbuf, off, len);
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+    }
+}
+
+// Decorator: A decorator to convert uppercase letters to lowercase
+class LowerCaseDecorator extends Reader {
+    private final Reader in;
+
+    public LowerCaseDecorator(Reader in) {
+        this.in = in;
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        int numCharsRead = in.read(cbuf, off, len);
+        for (int i = off; i < off + numCharsRead; i++) {
+            cbuf[i] = Character.toLowerCase(cbuf[i]);
+        }
+        return numCharsRead;
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+    }
+}
+
+// Driver class to test the decorator pattern
+public class IODecoratorExample {
+    public static void main(String[] args) {
+        String inputString = "HELLO WORLD! JAVA IS AWESOME!";
+        
+        // Create an InputStream to simulate file or user input
+        Reader reader = new StringReader(inputString);
+        
+        // Apply the decorator to convert all characters to lowercase
+        Reader decoratedReader = new LowerCaseDecorator(reader);
+        
+        try {
+            char[] buffer = new char[1024];
+            int numCharsRead;
+            
+            // Reading from the decorated reader
+            while ((numCharsRead = decoratedReader.read(buffer, 0, buffer.length)) != -1) {
+                System.out.print(new String(buffer, 0, numCharsRead));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                decoratedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
+
+2.
+
+Here's a basic MicroPython code to scan for available Wi-Fi networks:
+
+Python
+import network
+
+def scan_networks():
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    nets = wlan.scan()
+
+    for net in nets:
+        ssid = net[0].decode('utf-8')
+        bssid = net[1]
+        channel = net[2]
+        rssi = net[3] - 100
+        authmode = net[4]
+        hidden = net[5]
+
+        print(f"SSID: {ssid}\nBSSID: {bssid}\nChannel: {channel}\nRSSI: {rssi}\nAuthmode: {authmode}\nHidden: {hidden}\n")
+
+scan_networks()
+Use code with caution.
+
+How to Use This Code on Tinkercad:
+
+Create a New Circuit: Start a new circuit on Tinkercad.
+Add an ESP32 Board: Drag and drop an ESP32 board onto the workspace.
+Write the Code: Use the built-in code editor to input the Python code above.
+Simulate: Click the "Start Simulation" button to run the code.
+Connection Details:
+
+Power: Connect the ESP32 to the 5V power supply on the Tinkercad breadboard.
+Ground: Connect the ground pin of the ESP32 to the ground rail on the breadboard.
+Additional Considerations:
+
+Security: Be cautious when scanning networks, especially in public spaces. Respect network privacy and avoid unauthorized access.
+Network Strength: RSSI (Received Signal Strength Indicator) provides information about the strength of the Wi-Fi signal. A higher RSSI value indicates a stronger signal.
+Authentication: The authmode field indicates the authentication method used by the network (e.g., WPA2-PSK, WPA3-SAE).
+By combining the power of MicroPython and Tinkercad, you can effectively explore network scanning and other IoT concepts.
